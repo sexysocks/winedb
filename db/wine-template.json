@@ -1,0 +1,10 @@
+{ 
+  "varietal": "%(varietal)s",
+  "producer": "%(producer)s",
+  "vintage": "%(vintage)s",
+
+  "location": {
+    "fridge": "%(fridge)s",
+    "shelf": "%(shelf)s"
+  },
+}
