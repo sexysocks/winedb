@@ -8,29 +8,40 @@
 
 (On Mac OSX)
 
+```
 $ brew install mongodb
 $ mongod
+```
 
 (or with custom config)
 
+```
 $ mongod -f conf/mongod.conf
+```
 
 ## Get pymongo client
 
+```
 $ python -m pip install pymongo
+```
 
 ## Set paths
 
+```
 $ export PRODROOT=(path to winedb code)
 $ export PYTHONPATH=(path to winedb code):(path to winedb code)/app
 $ export FLASK_APP=winedb.py
+```
 
 ## Start the server
 
+```
 $ python -m flask run
+```
 
 ## Example requests
 
+```
 $ curl -i http://127.0.0.1:5000/wines/right/1 --data-binary @test/wine.json -H "Content-type: application/json"
 HTTP/1.0 200 OK
 Content-Type: application/json
@@ -105,7 +116,7 @@ Server: Werkzeug/0.12.2 Python/3.6.1
 Date: Mon, 07 Aug 2017 14:15:21 GMT
 
 []
-
+```
 
 # Planned items:
 
