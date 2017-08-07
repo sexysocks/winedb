@@ -11,12 +11,17 @@ def hello_winedb():
 # To query all wines
 @app.route('/wines')
 def get_all_wines():
-	wines = db.mongo.find_wine()
+	wines = db.mongo.find_wine_by_fields()
 	return jsonify(wines)
 
 @app.route('/wines/<fridgename>/<shelfnumber>',  methods=['GET'])
-def get_wines_in_fridge(fridgename, shelfnumber):
-	wines = db.mongo.find_wine(fridge=fridgename, shelf=shelfnumber)
+def get_wine(fridgename, shelfnumber):
+	wines = db.mongo.find_wine_by_fields(fridge=fridgename, shelf=shelfnumber)
+	return jsonify(wines)
+
+@app.route('/wines/<fridgename>/<shelfnumber>/<wineid>',  methods=['GET'])
+def get_wine_by_id(fridgename, shelfnumber, wineid):
+	wines = db.mongo.find_wine_by_id(wineid)
 	return jsonify(wines)
 
 @app.route('/wines/<fridgename>/<shelfnumber>', methods=['POST'])
@@ -26,3 +31,7 @@ def add_wine(fridgename, shelfnumber):
 	wine['shelf'] = shelfnumber
 	return jsonify(db.mongo.add_wine(**wine))
 
+@app.route('/wines/<fridgename>/<shelfnumber>/<wineid>', methods=['DELETE'])
+def delete_wine(fridgename, shelfnumber, wineid):
+	db.mongo.remove_wine_by_id(wineid)
+	return ('', 204)

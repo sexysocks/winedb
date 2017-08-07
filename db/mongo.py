@@ -1,5 +1,6 @@
 import os
 import logging
+from bson import ObjectId
 from pymongo import MongoClient
 
 def add_wine(producer='', varietal='', vintage='', fridge='', shelf=''):
@@ -21,11 +22,13 @@ def add_wine(producer='', varietal='', vintage='', fridge='', shelf=''):
 
 	# Insert document for wine
 	entry_wine_id = wine.insert_one(entry).inserted_id
-	entry_wine = db.wine.find({'_id': entry_wine_id}).next()
-	entry_wine['_id'] = str(entry_wine['_id'])
-	return entry_wine
+	entry_wine = next(db.wine.find({'_id': entry_wine_id}), None)
+	if entry_wine:
+		entry_wine['_id'] = str(entry_wine['_id'])
+		return entry_wine
+	return {}
 
-def find_wine(producer='', varietal='', vintage='', fridge='', shelf=''):
+def find_wine_by_fields(producer='', varietal='', vintage='', fridge='', shelf=''):
 	wine_template = open(os.environ['PRODROOT'] + '/db/wine-template.json').read()
 
 	entry = {}
@@ -61,7 +64,39 @@ def find_wine(producer='', varietal='', vintage='', fridge='', shelf=''):
 		result += [w]
 	return result
 
-def remove_wine(producer='', varietal='', vintage='', fridge='', shelf=''):
+def find_wine_by_id(wineid):
+	entry = {'_id': ObjectId(wineid)}
+	client = MongoClient('0.0.0.0', 27017)
+
+	# Database name -- to remove it do "use winedb" and "db.dropDatabase()"
+	db = client.winedb
+
+	# Collection name
+	wine = db.wine
+	query = db.wine.find(entry)
+
+	result = next(query, None)
+	if result:
+		result['_id'] = str(result['_id'])
+		return result
+	return {}
+
+def remove_wine_by_id(wineid):
+	entry = {'_id': ObjectId(wineid)}
+
+	client = MongoClient('0.0.0.0', 27017)
+
+	# Database name -- to remove it do "use winedb" and "db.dropDatabase()"
+	db = client.winedb
+
+	# Collection name
+	wine = db.wine
+	query = db.wine.delete_one(entry)
+
+	print("Deleted " + str(query.deleted_count) + " items from WineDB")
+	return {}
+
+def remove_wine_by_fields(producer='', varietal='', vintage='', fridge='', shelf=''):
 	wine_template = open(os.environ['PRODROOT'] + '/db/wine-template.json').read()
 
 	entry = {}
