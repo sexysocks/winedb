@@ -41,12 +41,9 @@ def find_wine_by_fields(producer='', varietal='', vintage='', fridge='', shelf='
 
 	# TODO: figure out the right way to query this
 	if fridge:
-		entry['location'] = {}
-		entry['location']['fridge'] = fridge.lower()
+		entry['location.fridge'] = fridge.lower()
 	if shelf:
-		if 'location' not in entry.keys():
-			entry['location'] = {}
-		entry['location']['shelf'] = shelf
+		entry['location.shelf'] = shelf.lower()
 
 	client = MongoClient('0.0.0.0', 27017)
 

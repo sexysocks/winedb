@@ -15,8 +15,13 @@ def get_all_wines():
 	return jsonify(wines)
 
 @app.route('/wines/<fridgename>/<shelfnumber>',  methods=['GET'])
-def get_wine(fridgename, shelfnumber):
+def get_wine_on_shelf(fridgename, shelfnumber):
 	wines = db.mongo.find_wine_by_fields(fridge=fridgename, shelf=shelfnumber)
+	return jsonify(wines)
+
+@app.route('/wines/<fridgename>',  methods=['GET'])
+def get_wine_in_fridge(fridgename):
+	wines = db.mongo.find_wine_by_fields(fridge=fridgename)
 	return jsonify(wines)
 
 @app.route('/wines/<fridgename>/<shelfnumber>/<wineid>',  methods=['GET'])
