@@ -3,14 +3,20 @@ import logging
 from bson import ObjectId
 from pymongo import MongoClient
 
-def add_wine(producer='', varietal='', vintage='', fridge='', shelf=''):
+def add_wine(category='', subcategory='', country='', region='', producer='',
+		varietal='', vintage='', name='', fridge='', shelf=''):
 	wine_template = open(os.environ['PRODROOT'] + '/db/wine-template.json').read()
 
-	entry = eval(wine_template % {'varietal': varietal.lower(),
-								 'producer': producer.lower(),
-								 'vintage': vintage,
-								 'fridge': fridge.lower(),
-								 'shelf': shelf})
+	entry = eval(wine_template % {'category': category.lower(),
+								  'subcategory': subcategory.lower(),
+								  'country': country.lower(),
+								  'region': region.lower(),
+								  'name': name.lower(),
+								  'varietal': varietal.lower(),
+								  'producer': producer.lower(),
+								  'vintage': vintage,
+								  'fridge': fridge.lower(),
+								  'shelf': shelf})
 
 	client = MongoClient('0.0.0.0', 27017)
 
@@ -28,16 +34,27 @@ def add_wine(producer='', varietal='', vintage='', fridge='', shelf=''):
 		return entry_wine
 	return {}
 
-def find_wine_by_fields(producer='', varietal='', vintage='', fridge='', shelf=''):
+def find_wine_by_fields(category=[], subcategory=[], country=[], region=[], producer=[],
+		varietal=[], vintage=[], name=[], fridge='', shelf=''):
 	wine_template = open(os.environ['PRODROOT'] + '/db/wine-template.json').read()
 
 	entry = {}
-	if producer:
-		entry['producer'] = producer.lower()
-	if varietal:
-		entry['varietal'] = varietal.lower()
-	if vintage:
-		entry['vintage'] = vintage
+	for x in producer:
+		entry['producer'] = x.lower()
+	for x in varietal:
+		entry['varietal'] = x.lower()
+	for x in vintage:
+		entry['vintage'] = x
+	for x in category:
+		entry['category'] = x.lower()
+	for x in subcategory:
+		entry['subcategory'] = x.lower()
+	for x in country:
+		entry['country'] = x.lower()
+	for x in region:
+		entry['region'] = x.lower()
+	for x in name:
+		entry['name'] = x.lower()
 
 	# TODO: figure out the right way to query this
 	if fridge:
@@ -93,16 +110,27 @@ def remove_wine_by_id(wineid):
 	print("Deleted " + str(query.deleted_count) + " items from WineDB")
 	return {}
 
-def remove_wine_by_fields(producer='', varietal='', vintage='', fridge='', shelf=''):
+def remove_wine_by_fields(category=[], subcategory=[], country=[], region=[], producer=[],
+		varietal=[], vintage=[], name=[], fridge='', shelf=''):
 	wine_template = open(os.environ['PRODROOT'] + '/db/wine-template.json').read()
 
 	entry = {}
-	if producer:
-		entry['producer'] = producer
-	if varietal:
-		entry['varietal'] = varietal
-	if vintage:
-		entry['vintage'] = vintage
+	for x in producer:
+		entry['producer'] = x.lower()
+	for x in varietal:
+		entry['varietal'] = x.lower()
+	for x in vintage:
+		entry['vintage'] = x
+	for x in category:
+		entry['category'] = x.lower()
+	for x in subcategory:
+		entry['subcategory'] = x.lower()
+	for x in country:
+		entry['country'] = x.lower()
+	for x in region:
+		entry['region'] = x.lower()
+	for x in name:
+		entry['name'] = x.lower()
 
 	# TODO: figure out the right way to query this
 	if fridge:

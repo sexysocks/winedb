@@ -1,7 +1,13 @@
 { 
+  "category": "%(category)s",
+  "subcategory": "%(subcategory)s",
+  "country": "%(country)s",
+  "region": "%(region)s",
+
   "varietal": "%(varietal)s",
   "producer": "%(producer)s",
   "vintage": "%(vintage)s",
+  "name": "%(name)s",
 
   "location": {
     "fridge": "%(fridge)s",
