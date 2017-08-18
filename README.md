@@ -2,6 +2,10 @@
 
 ## Application on Flask / MongoDB for managing a wine collection over 1 or more wine fridges.
 
+## Current deployment in AWS
+
+This is currently deployed in AWS at this URL: http://dusticole-winedb.us-east-1.elasticbeanstalk.com/
+
 # How to run WineDB
 
 ## Install and start Mongodb:
@@ -19,24 +23,16 @@ $ mongod
 $ mongod -f conf/mongod.conf
 ```
 
-## Get pymongo client
+## Get python dependencies
 
 ```
-$ python -m pip install pymongo
-```
-
-## Set paths
-
-```
-$ export PRODROOT=(path to winedb code)
-$ export PYTHONPATH=(path to winedb code):(path to winedb code)/app
-$ export FLASK_APP=winedb.py
+$ pip install -r requirements.txt
 ```
 
 ## Start the server
 
 ```
-$ python -m flask run
+$ python application.py
 ```
 
 ## Example requests
@@ -100,7 +96,7 @@ Date: Mon, 07 Aug 2017 14:15:03 GMT
   }
 ]
 
-$ curl -i http://127.0.0.1:5000/wines/right/1/598875d7574590b379917363 -X DELETE
+$ curl -i http://127.0.0.1:5000/wines/598875d7574590b379917363 -X DELETE
 HTTP/1.0 204 NO CONTENT
 Content-Type: text/html; charset=utf-8
 Content-Length: 0
