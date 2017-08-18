@@ -5,6 +5,9 @@ from application.mongo import db_add_wine, db_get_wine, db_update_wine, db_delet
 application = Flask(__name__)
 
 
+@application.route('/', methods=['GET'])
+def hello_winedb():
+	return "Hello WineDB User!"
 
 #
 # Basic API to add/get/update/delete wine
