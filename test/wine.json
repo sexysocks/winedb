@@ -1,5 +1,11 @@
 {
-	"producer": "Homewood",
-	"varietal": "Sangiovese",
-	"vintage": "2013"
-}
+    "category": "fortified wines",
+    "country": "usa",
+
+    "name": "the austin winery",
+    "producer": "the austin winery",
+    "region": "texas",
+    "subcategory": "red",
+    "varietal": "port blend",
+    "vintage": "NV"
+  }

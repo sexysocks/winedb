@@ -1,12 +1,31 @@
 import os
 import logging
 from bson import ObjectId
-from pymongo import MongoClient
+from application import dbclient
 
-def add_wine(category='', subcategory='', country='', region='', producer='',
+wine_template = '''
+{ 
+  "category": "%(category)s",
+  "subcategory": "%(subcategory)s",
+  "country": "%(country)s",
+  "region": "%(region)s",
+
+  "varietal": "%(varietal)s",
+  "producer": "%(producer)s",
+  "vintage": "%(vintage)s",
+  "name": "%(name)s",
+
+  "location": {
+    "fridge": "%(fridge)s",
+    "shelf": "%(shelf)s"
+  },
+}
+'''
+
+def db_add_wine(category='', subcategory='', country='', region='', producer='',
 		varietal='', vintage='', name='', fridge='', shelf=''):
-	wine_template = open(os.environ['PRODROOT'] + '/db/wine-template.json').read()
 
+	print(wine_template)
 	entry = eval(wine_template % {'category': category.lower(),
 								  'subcategory': subcategory.lower(),
 								  'country': country.lower(),
@@ -18,10 +37,8 @@ def add_wine(category='', subcategory='', country='', region='', producer='',
 								  'fridge': fridge.lower(),
 								  'shelf': shelf})
 
-	client = MongoClient('0.0.0.0', 27017)
-
 	# Database name -- to remove it do "use winedb" and "db.dropDatabase()"
-	db = client.winedb
+	db = dbclient.winedb
 
 	# Collection name
 	wine = db.wine
@@ -34,12 +51,11 @@ def add_wine(category='', subcategory='', country='', region='', producer='',
 		return entry_wine
 	return {}
 
-def get_wine(wineid):
+def db_get_wine(wineid):
 	entry = {'_id': ObjectId(wineid)}
-	client = MongoClient('0.0.0.0', 27017)
 
 	# Database name -- to remove it do "use winedb" and "db.dropDatabase()"
-	db = client.winedb
+	db = dbclient.winedb
 
 	# Collection name
 	wine = db.wine
@@ -51,13 +67,11 @@ def get_wine(wineid):
 		return result
 	return {}
 
-def delete_wine(wineid):
+def db_delete_wine(wineid):
 	entry = {'_id': ObjectId(wineid)}
 
-	client = MongoClient('0.0.0.0', 27017)
-
 	# Database name -- to remove it do "use winedb" and "db.dropDatabase()"
-	db = client.winedb
+	db = dbclient.winedb
 
 	# Collection name
 	wine = db.wine
@@ -66,7 +80,7 @@ def delete_wine(wineid):
 	print("Deleted " + str(query.deleted_count) + " items from WineDB")
 	return {}
 
-def update_wine(wineid, category='', subcategory='', country='', region='', producer='',
+def db_update_wine(wineid, category='', subcategory='', country='', region='', producer='',
 		varietal='', vintage='', name='', fridge='', shelf=''):
 	entry = {}
 	if producer:
@@ -91,22 +105,18 @@ def update_wine(wineid, category='', subcategory='', country='', region='', prod
 	if shelf:
 		entry['location.shelf'] = shelf.lower()
 
-	client = MongoClient('0.0.0.0', 27017)
-
 	# Database name -- to remove it do "use winedb" and "db.dropDatabase()"
-	db = client.winedb
+	db = dbclient.winedb
 
 	# Collection name
 	wine = db.wine
 	query = db.wine.update_one({'_id': ObjectId(wineid)}, {"$set": entry}, upsert=False)
 
 	print("Updated " + str(query.modified_count) + " item in WineDB")
-	return get_wine(wineid)
+	return db_get_wine(wineid)
 
-def get_wine_by_fields(category=[], subcategory=[], country=[], region=[], producer=[],
+def db_get_wine_by_fields(category=[], subcategory=[], country=[], region=[], producer=[],
 		varietal=[], vintage=[], name=[], fridge='', shelf=''):
-	wine_template = open(os.environ['PRODROOT'] + '/db/wine-template.json').read()
-
 	entry = {}
 	for x in producer:
 		entry['producer'] = x.lower()
@@ -130,10 +140,8 @@ def get_wine_by_fields(category=[], subcategory=[], country=[], region=[], produ
 	if shelf:
 		entry['location.shelf'] = shelf.lower()
 
-	client = MongoClient('0.0.0.0', 27017)
-
 	# Database name -- to remove it do "use winedb" and "db.dropDatabase()"
-	db = client.winedb
+	db = dbclient.winedb
 
 	# Collection name
 	wine = db.wine
