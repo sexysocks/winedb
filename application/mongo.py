@@ -24,8 +24,6 @@ wine_template = '''
 
 def db_add_wine(category='', subcategory='', country='', region='', producer='',
 		varietal='', vintage='', name='', fridge='', shelf=''):
-
-	print(wine_template)
 	entry = eval(wine_template % {'category': category.lower(),
 								  'subcategory': subcategory.lower(),
 								  'country': country.lower(),
@@ -77,7 +75,6 @@ def db_delete_wine(wineid):
 	wine = db.wine
 	query = db.wine.delete_one(entry)
 
-	print("Deleted " + str(query.deleted_count) + " items from WineDB")
 	return {}
 
 def db_update_wine(wineid, category='', subcategory='', country='', region='', producer='',
@@ -112,7 +109,6 @@ def db_update_wine(wineid, category='', subcategory='', country='', region='', p
 	wine = db.wine
 	query = db.wine.update_one({'_id': ObjectId(wineid)}, {"$set": entry}, upsert=False)
 
-	print("Updated " + str(query.modified_count) + " item in WineDB")
 	return db_get_wine(wineid)
 
 def db_get_wine_by_fields(category=[], subcategory=[], country=[], region=[], producer=[],

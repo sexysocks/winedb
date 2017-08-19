@@ -1,0 +1,4 @@
+welcome: Welcome to wine db. Check back soon for features to manage your wine cellar.
+round: Can you repeat the numbers {{ numbers|join(", ") }} backwards?
+win: Good job!
+lose: Sorry, that's the wrong answer.
