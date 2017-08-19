@@ -137,3 +137,8 @@ Date: Mon, 07 Aug 2017 14:15:21 GMT
 
 ## EXTRAS:
 1. Alexa skill to add, query, remove wine
+
+
+# Miscellaneous Notes
+
+- Add config setup setup to EB configuration to sudo yum install libffi-devel !!!

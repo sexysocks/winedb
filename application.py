@@ -1,13 +1,13 @@
 import logging
 from random import randint
 from flask import Flask, Response, request, jsonify, json, render_template
-# from flask_ask import Ask, statement, question, session
+from flask_ask import Ask, statement, question, session
 from application.mongo import db_add_wine, db_get_wine, db_update_wine, db_delete_wine, db_get_wine_by_fields
 
 # Elastic Beanstalk initalization
 application = Flask(__name__)
-# ask = Ask(application, "/")
-# logging.getLogger("flask_ask").setLevel(logging.DEBUG)
+ask = Ask(application, "/")
+logging.getLogger("flask_ask").setLevel(logging.DEBUG)
 
 @application.route('/', methods=['GET'])
 def hello_winedb():
@@ -79,26 +79,26 @@ def get_wine_in_fridge(fridgename):
 	wines = db_get_wine_by_fields(fridge=fridgename, **dict(request.args))
 	return jsonify(wines)
 
-# @ask.launch
-# def launch_alexa():
-#     welcome_msg = render_template('welcome')
-#     return statement(welcome_msg)
+@ask.launch
+def launch_alexa():
+    welcome_msg = render_template('welcome')
+    return statement(welcome_msg)
 
-# @ask.intent("YesIntent")
-# def next_round():
-#     numbers = [randint(0, 9) for _ in range(3)]
-#     round_msg = render_template('round', numbers=numbers)
-#     session.attributes['numbers'] = numbers[::-1]  # reverse
-#     return question(round_msg)
+@ask.intent("YesIntent")
+def next_round():
+    numbers = [randint(0, 9) for _ in range(3)]
+    round_msg = render_template('round', numbers=numbers)
+    session.attributes['numbers'] = numbers[::-1]  # reverse
+    return question(round_msg)
 
-# @ask.intent("AnswerIntent", convert={'first': int, 'second': int, 'third': int})
-# def answer(first, second, third):
-#     winning_numbers = session.attributes['numbers']
-#     if [first, second, third] == winning_numbers:
-#         msg = render_template('win')
-#     else:
-#         msg = render_template('lose')
-#     return statement(msg)
+@ask.intent("AnswerIntent", convert={'first': int, 'second': int, 'third': int})
+def answer(first, second, third):
+    winning_numbers = session.attributes['numbers']
+    if [first, second, third] == winning_numbers:
+        msg = render_template('win')
+    else:
+        msg = render_template('lose')
+    return statement(msg)
 
 
 if __name__ == '__main__':
