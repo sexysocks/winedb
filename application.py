@@ -1,4 +1,5 @@
 import logging
+import requests
 from random import randint
 from flask import Flask, Response, request, jsonify, json, render_template
 from flask_ask import Ask, statement, question, session
@@ -65,7 +66,6 @@ def delete_wine(wineid):
 
 @application.route('/wines')
 def get_all_wines():
-	print(dict(request.args))
 	wines = db_get_wine_by_fields(**dict(request.args))
 	return jsonify(wines)
 
@@ -82,24 +82,24 @@ def get_wine_in_fridge(fridgename):
 @ask.launch
 def launch_alexa():
     welcome_msg = render_template('welcome')
-    return statement(welcome_msg)
+    return question(welcome_msg)
 
-@ask.intent("YesIntent")
-def next_round():
-    numbers = [randint(0, 9) for _ in range(3)]
-    round_msg = render_template('round', numbers=numbers)
-    session.attributes['numbers'] = numbers[::-1]  # reverse
-    return question(round_msg)
+@ask.intent("ListAllIntent")
+def list_all_wines():
+	# TODO: Figure out how to save wines dict in session attributes!!!
+	wines = db_get_wine_by_fields()
+	session.attributes['index'] = 0
+	list_msg = render_template('list', number=len(wines))
+	return question(list_msg)
 
-@ask.intent("AnswerIntent", convert={'first': int, 'second': int, 'third': int})
-def answer(first, second, third):
-    winning_numbers = session.attributes['numbers']
-    if [first, second, third] == winning_numbers:
-        msg = render_template('win')
-    else:
-        msg = render_template('lose')
-    return statement(msg)
+@ask.intent("NextIntent")
+def next_wine():
+	wines = db_get_wine_by_fields()
+	next_wine = wines[session.attributes['index']]
+	session.attributes['index'] += 1
+	next_msg = render_template('next', name=next_wine['name'], **next_wine['location'])
+	return question(next_msg)
 
 
 if __name__ == '__main__':
-    application.run(host='0.0.0.0')
+    application.run(host='0.0.0.0', debug=True)

@@ -76,7 +76,7 @@ class MyHTMLParser(HTMLParser):
                     else:
                         self.fields['fridge'] = 'small'
                     self.fields['shelf'] = l[1]
-                    create_wine('http://localhost:5000', self.fields)
+                    create_wine('http://dusticole-winedb.us-east-1.elasticbeanstalk.com/', self.fields)
                     #print(json.dumps(self.fields) + ',')
 
 if __name__=='__main__':

@@ -1,4 +1,4 @@
-welcome: Welcome to wine db. Check back soon for features to manage your wine cellar.
-round: Can you repeat the numbers {{ numbers|join(", ") }} backwards?
-win: Good job!
-lose: Sorry, that's the wrong answer.
+welcome: Welcome to wine db. What would you like to know?
+
+list: You have {{ number }} wines in your cellar. Say next to list them.
+next: The next wine is {{ name }}. It is located in the {{ fridge }} wine fridge on shelf number {{ shelf }}. 
